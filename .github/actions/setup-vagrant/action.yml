@@ -1,0 +1,20 @@
+description: Setup Vagrant on GitHub actions agent
+name: Setup Vagrant
+runs:
+    using: composite
+    steps:
+        # TODO: Fail if not macOS agent
+
+        # TODO: Only on macos-*
+        # Vagrant needs rsync for rsync typed synced_folder
+        - shell: bash
+          run: brew install rsync
+
+        # TODO: Install vagrant and virtual box (macos-11) only
+        #  See https://github.com/actions/virtual-environments/issues/2999#issuecomment-812566316
+        #-   run: brew install --cask vagrant virtualbox
+
+        # TODO: Setup vagrant sudoer
+
+        # TODO: Maybe patch vagrant, see https://github.com/hashicorp/vagrant/issues/12583#issuecomment-985787134
+

@@ -8,23 +8,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: brew install rsync
-
-      - name: Cache Vagrant boxes
-        uses: actions/cache@v2
+      - uses: ./.github/actions/setup-vagrant
+      - uses: ./.github/actions/setup-vagrant-box
         with:
-          path: ~/.vagrant.d/boxes
-          key: ${{ runner.os }}-vagrant-${{ hashFiles('.github/vagrant/freebsd-12.3/Vagrantfile') }}
-          restore-keys: |
-            ${{ runner.os }}-vagrant-
+          working-directory: .github/vagrant/freebsd-12.3
+      - uses: ./.github/actions/gradlew-vagrant
+        with:
+          working-directory: .github/vagrant/freebsd-12.3
+          arguments: help
 
-      - name: Show vagrant version
-        run: vagrant --version
+      # - run: brew install rsync
 
-      - name: Vagrant up
-        run: vagrant up
-        working-directory: .github/vagrant/freebsd-12.3
+      # - name: Cache Vagrant boxes
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.vagrant.d/boxes
+      #     key: ${{ runner.os }}-vagrant-${{ hashFiles('.github/vagrant/freebsd-12.3/Vagrantfile') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-vagrant-
 
-      - name: SSH into box
-        run: vagrant ssh -c "./gradlew help"
-        working-directory: .github/vagrant/freebsd-12.3
+      # - name: Show vagrant version
+      #   run: vagrant --version
+
+      # - name: Vagrant up
+      #   run: vagrant up
+      #   working-directory: .github/vagrant/freebsd-12.3
+
+      # - name: SSH into box
+      #   run: vagrant ssh -c "./gradlew help"
+      #   working-directory: .github/vagrant/freebsd-12.3
