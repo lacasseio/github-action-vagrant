@@ -1,4 +1,4 @@
-description: Setup Vagrant on GitHub actions agent
+description: Setup Vagrant on GitHub actions agent (macOS only)
 name: Setup Vagrant
 runs:
     using: composite

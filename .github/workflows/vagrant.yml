@@ -16,6 +16,8 @@ jobs:
         with:
           working-directory: .github/vagrant/freebsd-12.3
           arguments: help
+      - run: vagrant halt
+        working-directory: .github/vagrant/freebsd-12.3
 
       # - run: brew install rsync
 

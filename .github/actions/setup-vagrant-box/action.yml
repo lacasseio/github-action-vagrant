@@ -10,9 +10,11 @@ runs:
         -   name: Cache Vagrant boxes
             uses: actions/cache@v2
             with:
-              path: ~/.vagrant.d/boxes
-              key: ${{ runner.os }}-vagrant-${{ hashFiles('${inputs.working-directory}/Vagrantfile') }}
-              restore-keys: ${{ runner.os }}-vagrant-
+                path: |
+                    ~/.vagrant.d/boxes
+                    ~/VirtualBox VMs
+                key: ${{ runner.os }}-vagrant-${{ hashFiles('${inputs.working-directory}/Vagrantfile') }}
+                restore-keys: ${{ runner.os }}-vagrant-
 
         # TODO: Should have a post action that halt the machine
         -   name: Vagrant up
