@@ -4,13 +4,13 @@ inputs:
     working-directory:
         description: 'Gradle arguments'
         required: true
-    arguments:
+    run:
         description: 'Args'
         required: true
 runs:
     using: composite
     steps:
         -   shell: bash
-            run: vagrant ssh -c "./gradlew ${{ inputs.arguments }}"
-            working-directory: ${{ inputs.working-directory }}
+            run: vagrant ssh -c "${{ inputs.run }}"
+            working-directory: ${{ inputs.working-directory }}.bak
 

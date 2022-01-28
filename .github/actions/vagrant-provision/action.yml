@@ -1,0 +1,75 @@
+description: Run Gradle with Nokee cache
+name: Gradle
+inputs:
+    working-directory:
+        description: 'Gradle arguments'
+        required: true
+    name:
+        description: 'Blah'
+        required: false
+        default: mybox
+    mem:
+        description: 'mem'
+        required: false
+        default: '4096'
+    cpus:
+        description: 'cpu'
+        required: false
+        default: '2'
+runs:
+    using: composite
+    steps:
+        -   name: Cache Vagrant boxes
+            uses: actions/cache@v2
+            id: cache
+            with:
+                path: ${{ inputs.working-directory }}.bak/package.box
+                key: ${{ runner.os }}-vagrant1-${{ hashFiles('${inputs.working-directory}/Vagrantfile') }}
+                restore-keys: ${{ runner.os }}-vagrant1-
+
+        # TODO: Should have a post action that halt the machine
+        -   name: Create box
+            if: steps.cache.outputs.cache-hit != 'true'
+            shell: bash
+            run: |
+                vagrant up
+                vagrant package --output ${{ inputs.working-directory }}.bak/package.box
+            working-directory: ${{ inputs.working-directory }}
+
+        -   shell: bash
+            run: |
+                vagrant box add ${{ inputs.name }} package.box
+            working-directory: ${{ inputs.working-directory }}.bak
+
+        -   name: Provision
+            shell: bash
+            run: |
+                run() {
+                  printf "\033[0;35m==>\033[0m \033[0;32m%b\n\033[0m" "$*"
+                  eval "$*"
+                }
+
+                vagrant init ${{ inputs.name }}
+                echo 'set -e' > shell.sh
+                export -p | grep 'GITHUB_' >> shell.sh
+                cat >> shell.sh <<'EOF'
+                    echo "cd /home/vagrant/${GITHUB_REPOSITORY}" >> /home/vagrant/.cshrc
+                EOF
+
+                cat > Vagrantfile <<EOF
+                    Vagrant.configure("2") do |config|
+                        config.vm.box = "${{inputs.box}}"
+                        config.vm.provider "virtualbox" do |vb|
+                            vb.memory = "${{ inputs.mem }}"
+                            vb.cpus = "${{ inputs.cpus }}"
+                        end
+                        config.vm.synced_folder "${GITHUB_WORKSPACE}", "/home/vagrant/${GITHUB_REPOSITORY}", type: "${{inputs.sync-type}}"
+                        config.vm.provision "shell", path: "shell.sh"
+                    end
+                EOF
+
+                run cat Vagrantfile
+                run cat shell.sh
+
+                run vagrant up --provision
+            working-directory: ${{ inputs.working-directory }}.bak
