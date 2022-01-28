@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: ./.github/actions/setup-vagrant
-      - uses: ./.github/actions/setup-provision
+      - uses: ./.github/actions/vagrant-provision
         with:
           working-directory: .github/vagrant/freebsd-12.3
       - uses: ./.github/actions/vagrant-ssh
