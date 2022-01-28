@@ -15,7 +15,7 @@ jobs:
       - uses: ./.github/actions/gradlew-vagrant
         with:
           working-directory: .github/vagrant/freebsd-12.3
-          arguments: help
+          arguments: tasks
       - run: vagrant halt
         working-directory: .github/vagrant/freebsd-12.3
 
