@@ -1,4 +1,4 @@
-description: Run Gradle with Nokee cache
+description: 'Provision Vagrant box'
 name: Gradle
 inputs:
     base-directory:
@@ -6,23 +6,30 @@ inputs:
         required: false
         default: '.github/vagrants'
     name:
-        description: 'Blah'
+        description: 'Vagrant box name to provision from the base-directory, i.e. ${base-directory}/freebsd-12.3'
         required: true
+
+    # Consider choosing a value within the hardware resources
+    #   See https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
     mem:
-        description: 'mem'
+        description: 'Vagrant box memory setting'
         required: false
         default: '2048'
     cpus:
-        description: 'cpu'
+        description: 'Vagrant box CPU setting'
         required: false
         default: '2'
+
+    # Note that Gradle doesn't well behave on NFS due to lack of file locking capability
+    #   rsync is a good default for the GitHub workspace
     sync-type:
-        description: 'sync'
+        description: 'Vagrant sync type for the GitHub workspace'
         required: false
         default: 'rsync'
 runs:
     using: composite
     steps:
+        # TODO: We should guard against double provisioning
         -   name: Cache vagrant box
             uses: actions/cache@v2
             id: cache
@@ -30,7 +37,6 @@ runs:
                 path: ${{ inputs.base-directory }}/${{ inputs.name }}.bak/package.box
                 key: ${{ runner.os }}-vagrant-${{ hashFiles(format('{0}/{1}/Vagrantfile', inputs['base-directory'], inputs['name'])) }}
 
-        # TODO: Should have a post action that halt the machine, maybe not as we now export
         -   name: Create vagrant box [cache-miss only]
             if: steps.cache.outputs.cache-hit != 'true'
             shell: bash
@@ -39,6 +45,7 @@ runs:
                 vagrant package --output ${{ github.workspace }}/${{ inputs.base-directory }}/${{ inputs.name }}.bak/package.box
             working-directory: ${{ inputs.base-directory }}/${{ inputs.name }}
 
+        # TODO: We should import the machine under a unambiguous name to avoid conflict on machine with multiple self-hosted runner (baremetal)
         -   name: Import vagrant box
             shell: bash
             run: |
