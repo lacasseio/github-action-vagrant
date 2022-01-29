@@ -9,6 +9,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - uses: ./.github/actions/setup-vagrant
+        with:
+          install-vagrant-if: 'false'
+          install-virtualbox-if: 'false'
       - uses: ./.github/actions/vagrant-provision
         with:
           mem: 4096
