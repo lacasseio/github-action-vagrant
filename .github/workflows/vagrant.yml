@@ -8,15 +8,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/setup-vagrant
+      - uses: nokeedev/actions/setup-vagrant
         with:
           install-vagrant-if: 'false'
           install-virtualbox-if: 'false'
-      - uses: ./.github/actions/vagrant-provision
+      - uses: nokeedev/actions/vagrant-provision
         with:
           mem: 4096
           name: freebsd-12.3
-      - uses: ./.github/actions/vagrant-ssh
+      - uses: nokeedev/actions/vagrant-ssh
         with:
           name: freebsd-12.3
           run: ./gradlew tasks
