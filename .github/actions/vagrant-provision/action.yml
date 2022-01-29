@@ -67,7 +67,10 @@ runs:
                             vb.memory = "${{ inputs.mem }}"
                             vb.cpus = "${{ inputs.cpus }}"
                         end
-                        config.vm.synced_folder "${GITHUB_WORKSPACE}", "/home/vagrant/${GITHUB_REPOSITORY}", type: "${{inputs.sync-type}}"
+                        config.vm.synced_folder "${GITHUB_WORKSPACE}", "/home/vagrant/${GITHUB_REPOSITORY}", type: "${{inputs.sync-type}}",
+                            rsync__exclude: ["package.box", ".idea", ".gradle"],
+                            rsync_args: ["--recursive", "--links", "--times", "--delete", "--compress"],
+                            rsync__verbose: true
                         config.vm.provision "shell", path: "shell.sh"
                     end
                 EOF
