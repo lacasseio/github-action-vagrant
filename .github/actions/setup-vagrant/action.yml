@@ -10,14 +10,13 @@ runs:
         - name: Install rsync (required for rsync typed synced_folder) [macos-* only]
           shell: bash
           run: brew install rsync
-          if: ${{ startsWith(runner.name, 'macos-') }}
+#          if: ${{ startsWith(runner.name, 'macos-') }}
 
         # On macos-11, vagrant and virtualbox are not installed
         #   See https://github.com/actions/virtual-environments/issues/2999#issuecomment-812566316
-        - name: Install vagrant and virtualbox [macos-11 only]
-          shell: bash
-          run: brew install --cask vagrant virtualbox
-          if: ${{ runner.name == 'macos-11' }}
+#        - name: Install vagrant and virtualbox [macos-11 only]
+#          shell: bash
+#          run: brew install --cask vagrant virtualbox
 
         # Disk size plugin seems to work fine with regard to resizing the primary disk
         #   See https://github.com/sprotheroe/vagrant-disksize
@@ -26,7 +25,7 @@ runs:
         - name: Install vagrant-disksize plugin [macos-* only]
           shell: bash
           run: vagrant plugin install vagrant-disksize
-          if: ${{ startsWith(runner.name, 'macos-') }}
+#          if: ${{ startsWith(runner.name, 'macos-') }}
 
         # TODO: Setup vagrant sudoer
 
