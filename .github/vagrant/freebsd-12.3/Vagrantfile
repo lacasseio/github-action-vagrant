@@ -1,9 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-#sudo pkg install -y openjdk8 llvm90 gcc9 bash tree git
 $script = <<-SCRIPT
-echo "cd /vagrant" >> /home/vagrant/.cshrc
 pkg install -y openjdk8 llvm90 gcc9 bash tree git
 SCRIPT
 
@@ -15,30 +13,10 @@ Vagrant.configure("2") do |config|
   end
   config.vm.provision "shell", inline: $script
   config.vm.network "private_network", type: "dhcp"
-#   config.vm.synced_folder "../../../", "/vagrant", type: "rsync"
-  #config.disksize.size = "50GB"
   config.disksize.size = "20GB"
 
   config.ssh.shell = "sh"
-  #config.ssh.extra_args = ["-t", "cd /vagrant; sh"]
 
-  # Manual Steps
-  # - [ ] Resize Disk, see https://www.freebsd.org/doc/handbook/disks-growing.html
-  #       NOTE: May need to start growfs service: % sudo service growfs onestart
-  # - [ ] Install OpenJDK 8
-  #       % sudo pkg install -y openjdk8
-  # - [ ] Install Clang 9
-  #       % sudo pkg install -y llvm90
-  # - [ ] Install GCC 9
-  #       % sudo pkg install -y gcc9
-  # - [ ] Install Bash
-  #       % sudo pkg install -y bash
-  # - [ ] Install Vim
-  #       % sudo pkg install -y vim
-  # - [ ] Install GitLab Runner, see https://docs.gitlab.com/runner/install/freebsd.html
-  # Follow up
-  # - [ ] Install Git
-  #       % sudo pkg install -y git
-  # - [ ] Install Tree
-  #       % sudo pkg install -y tree
+  # Sync repository to box
+#   config.vm.synced_folder "../../../", "/vagrant", type: "rsync"
 end
