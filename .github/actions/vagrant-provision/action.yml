@@ -33,7 +33,7 @@ runs:
             shell: bash
             run: |
                 vagrant up
-                vagrant package --output ${{ inputs.working-directory }}.bak/package.box
+                vagrant package --output ${{ github.workspace }}/${{ inputs.working-directory }}.bak/package.box
             working-directory: ${{ inputs.working-directory }}
 
         -   shell: bash
