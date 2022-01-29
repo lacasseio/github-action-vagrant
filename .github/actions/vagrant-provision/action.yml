@@ -11,7 +11,7 @@ inputs:
     mem:
         description: 'mem'
         required: false
-        default: '4096'
+        default: '2048'
     cpus:
         description: 'cpu'
         required: false
