@@ -62,7 +62,7 @@ runs:
 
                 cat > Vagrantfile <<EOF
                     Vagrant.configure("2") do |config|
-                        config.vm.box = "${{inputs.box}}"
+                        config.vm.box = "${{ inputs.name }}"
                         config.vm.provider "virtualbox" do |vb|
                             vb.memory = "${{ inputs.mem }}"
                             vb.cpus = "${{ inputs.cpus }}"
