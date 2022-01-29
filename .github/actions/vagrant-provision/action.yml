@@ -16,6 +16,10 @@ inputs:
         description: 'cpu'
         required: false
         default: '2'
+    sync-type:
+        description: 'sync'
+        required: false
+        default: 'rsync'
 runs:
     using: composite
     steps:
