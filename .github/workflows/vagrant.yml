@@ -12,10 +12,10 @@ jobs:
       - uses: ./.github/actions/vagrant-provision
         with:
           mem: 4096
-          working-directory: .github/vagrants/freebsd-12.3
+          name: freebsd-12.3
       - uses: ./.github/actions/vagrant-ssh
         with:
-          working-directory: .github/vagrants/freebsd-12.3
+          name: freebsd-12.3
           run: ./gradlew tasks
 #      - run: vagrant halt
 #        working-directory: .github/vagrant/freebsd-12.3

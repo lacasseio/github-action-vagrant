@@ -1,13 +1,13 @@
 description: Run Gradle with Nokee cache
 name: Gradle
 inputs:
-    working-directory:
-        description: 'Gradle arguments'
-        required: true
+    base-directory:
+        description: 'Base directory where box configuration are located, defaults to .github/vagrants'
+        required: false
+        default: '.github/vagrants'
     name:
         description: 'Blah'
-        required: false
-        default: mybox
+        required: true
     mem:
         description: 'mem'
         required: false
@@ -27,8 +27,8 @@ runs:
             uses: actions/cache@v2
             id: cache
             with:
-                path: ${{ inputs.working-directory }}.bak/package.box
-                key: ${{ runner.os }}-vagrant1-${{ hashFiles(format('{0}/Vagrantfile', inputs['working-directory'])) }}
+                path: ${{ inputs.base-directory }}/${{ inputs.name }}.bak/package.box
+                key: ${{ runner.os }}-vagrant-${{ hashFiles(format('{0}/{1}/Vagrantfile', inputs['base-directory'], inputs['name'])) }}
 
         # TODO: Should have a post action that halt the machine, maybe not as we now export
         -   name: Create vagrant box [cache-miss only]
@@ -36,14 +36,14 @@ runs:
             shell: bash
             run: |
                 vagrant up
-                vagrant package --output ${{ github.workspace }}/${{ inputs.working-directory }}.bak/package.box
-            working-directory: ${{ inputs.working-directory }}
+                vagrant package --output ${{ github.workspace }}/${{ inputs.base-directory }}/${{ inputs.name }}.bak/package.box
+            working-directory: ${{ inputs.base-directory }}/${{ inputs.name }}
 
         -   name: Import vagrant box
             shell: bash
             run: |
-                vagrant box add ${{ inputs.name }} package.box
-            working-directory: ${{ inputs.working-directory }}.bak
+                vagrant box add --force ${{ inputs.name }} package.box
+            working-directory: ${{ inputs.base-directory }}/${{ inputs.name }}.bak
 
         -   name: Provision vagrant box
             shell: bash
@@ -79,4 +79,4 @@ runs:
                 run cat shell.sh
 
                 run vagrant up --provision
-            working-directory: ${{ inputs.working-directory }}.bak
+            working-directory: ${{ inputs.base-directory }}/${{ inputs.name }}.bak

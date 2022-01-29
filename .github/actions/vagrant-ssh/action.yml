@@ -1,8 +1,12 @@
 description: Run Gradle with Nokee cache
 name: Gradle
 inputs:
-    working-directory:
+    base-directory:
         description: 'Gradle arguments'
+        required: false
+        default: '.github/vagrants'
+    name:
+        description: 'name'
         required: true
     run:
         description: 'Args'
@@ -12,5 +16,5 @@ runs:
     steps:
         -   shell: bash
             run: vagrant ssh -c "${{ inputs.run }}"
-            working-directory: ${{ inputs.working-directory }}.bak
+            working-directory: ${{ inputs.base-directory }}/${{ inputs.name }}.bak
 
