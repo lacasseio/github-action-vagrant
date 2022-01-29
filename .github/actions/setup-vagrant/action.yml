@@ -14,6 +14,9 @@ runs:
         #  See https://github.com/actions/virtual-environments/issues/2999#issuecomment-812566316
         #-   run: brew install --cask vagrant virtualbox
 
+        - shell: bash
+          run: vagrant plugin install vagrant-disksize
+
         # TODO: Setup vagrant sudoer
 
         # TODO: Maybe patch vagrant, see https://github.com/hashicorp/vagrant/issues/12583#issuecomment-985787134
