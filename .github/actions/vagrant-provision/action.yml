@@ -28,7 +28,7 @@ runs:
             id: cache
             with:
                 path: ${{ inputs.working-directory }}.bak/package.box
-                key: ${{ runner.os }}-vagrant1-${{ hashFiles(format('{0}/Vagrantfile', inputs.get('working-directory'))) }}
+                key: ${{ runner.os }}-vagrant1-${{ hashFiles(join([inputs.get('working-directory'), 'Vagrantfile'], '/')) }}
 #                restore-keys: ${{ runner.os }}-vagrant1-
 
         # TODO: Should have a post action that halt the machine
